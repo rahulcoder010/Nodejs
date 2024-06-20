@@ -1,0 +1,115 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Tutorial API
+  description: API for managing tutorials
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /tutorials:
+    get:
+      summary: Retrieve all tutorials
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Tutorial"
+        500:
+          description: Internal server error
+    post:
+      summary: Create a new tutorial
+      parameters:
+        - name: tutorial
+          in: body
+          description: Tutorial object
+          required: true
+          schema:
+            $ref: "#/definitions/Tutorial"
+      responses:
+        201:
+          description: Tutorial created successfully
+          schema:
+            $ref: "#/definitions/Tutorial"
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+  /tutorials/{id}:
+    get:
+      summary: Retrieve a tutorial by ID
+      parameters:
+        - name: id
+          in: path
+          description: Tutorial ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Tutorial"
+        404:
+          description: Tutorial not found
+        500:
+          description: Internal server error
+    put:
+      summary: Update a tutorial by ID
+      parameters:
+        - name: id
+          in: path
+          description: Tutorial ID
+          required: true
+          type: string
+        - name: tutorial
+          in: body
+          description: Tutorial object
+          required: true
+          schema:
+            $ref: "#/definitions/Tutorial"
+      responses:
+        200:
+          description: Tutorial updated successfully
+        404:
+          description: Tutorial not found
+        500:
+          description: Internal server error
+    delete:
+      summary: Delete a tutorial by ID
+      parameters:
+        - name: id
+          in: path
+          description: Tutorial ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tutorial deleted successfully
+        404:
+          description: Tutorial not found
+        500:
+          description: Internal server error
+  /tutorials/published:
+    get:
+      summary: Retrieve all published tutorials
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Tutorial"
+        500:
+          description: Internal server error
+definitions:
+  Tutorial:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      published:
+        type: boolean
