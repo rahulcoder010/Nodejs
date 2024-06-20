@@ -141,3 +141,200 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+// Generate Swagger documentation for an API endpoint
+exports.generateSwaggerDocumentation = (req, res) => {
+  const swaggerDocument = {
+    openapi: "3.0.0",
+    info: {
+      title: "Tutorial API",
+      version: "1.0.0",
+      description: "API documentation for the Tutorial API"
+    },
+    paths: {
+      "/api/tutorials": {
+        get: {
+          summary: "Retrieve all tutorials",
+          responses: {
+            200: {
+              description: "Successful response",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/Tutorial"
+                    }
+                  }
+                }
+              }
+            },
+            500: {
+              description: "Internal server error"
+            }
+          }
+        },
+        post: {
+          summary: "Create a new tutorial",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Tutorial"
+                }
+              }
+            }
+          },
+          responses: {
+            200: {
+              description: "Successful response",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/Tutorial"
+                  }
+                }
+              }
+            },
+            400: {
+              description: "Bad request"
+            },
+            500: {
+              description: "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/tutorials/{id}": {
+        get: {
+          summary: "Retrieve a tutorial by ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: {
+                type: "string"
+              }
+            }
+          ],
+          responses: {
+            200: {
+              description: "Successful response",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/Tutorial"
+                  }
+                }
+              }
+            },
+            404: {
+              description: "Tutorial not found"
+            },
+            500: {
+              description: "Internal server error"
+            }
+          }
+        },
+        put: {
+          summary: "Update a tutorial by ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: {
+                type: "string"
+              }
+            }
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/Tutorial"
+                }
+              }
+            }
+          },
+          responses: {
+            200: {
+              description: "Successful response",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/Tutorial"
+                  }
+                }
+              }
+            },
+            400: {
+              description: "Bad request"
+            },
+            404: {
+              description: "Tutorial not found"
+            },
+            500: {
+              description: "Internal server error"
+            }
+          }
+        },
+        delete: {
+          summary: "Delete a tutorial by ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: {
+                type: "string"
+              }
+            }
+          ],
+          responses: {
+            200: {
+              description: "Successful response",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/Tutorial"
+                  }
+                }
+              }
+            },
+            404: {
+              description: "Tutorial not found"
+            },
+            500: {
+              description: "Internal server error"
+            }
+          }
+        }
+      }
+    },
+    components: {
+      schemas: {
+        Tutorial: {
+          type: "object",
+          properties: {
+            title: {
+              type: "string"
+            },
+            description: {
+              type: "string"
+            },
+            published: {
+              type: "boolean"
+            }
+          }
+        }
+      }
+    }
+  };
+
+  res.setHeader("Content-Type", "application/x-yaml");
+  res.send(jsyaml.dump(swaggerDocument));
+};
