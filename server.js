@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const Joi = require("joi");
 
 const app = express();
 
@@ -41,3 +42,23 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+// Joi validation example
+const schema = Joi.object({
+  name: Joi.string().required(),
+  age: Joi.number().integer().min(18).max(99).required(),
+  email: Joi.string().email().required(),
+});
+
+const data = {
+  name: "John Doe",
+  age: 25,
+  email: "johndoe@example.com",
+};
+
+const { error, value } = schema.validate(data);
+if (error) {
+  console.log(error.details);
+} else {
+  console.log(value);
+}
