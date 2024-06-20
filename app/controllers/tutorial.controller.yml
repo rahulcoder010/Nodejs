@@ -1,0 +1,283 @@
+const fs = require('fs');
+
+const swaggerData = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Tutorial API',
+    version: '1.0.0',
+    description: 'API documentation for Tutorial endpoints'
+  },
+  paths: {
+    '/api/tutorials': {
+      get: {
+        summary: 'Get all tutorials',
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/Tutorial'
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal Server Error'
+          }
+        }
+      },
+      post: {
+        summary: 'Create a new tutorial',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Tutorial'
+              }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Tutorial'
+                }
+              }
+            }
+          },
+          '400': {
+            description: 'Bad Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal Server Error'
+          }
+        }
+      },
+      delete: {
+        summary: 'Delete all tutorials',
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal Server Error'
+          }
+        }
+      }
+    },
+    '/api/tutorials/{id}': {
+      get: {
+        summary: 'Get a tutorial by ID',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string'
+            }
+          }
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Tutorial'
+                }
+              }
+            }
+          },
+          '404': {
+            description: 'Not Found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal Server Error'
+          }
+        }
+      },
+      put: {
+        summary: 'Update a tutorial by ID',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string'
+            }
+          }
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Tutorial'
+              }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Tutorial'
+                }
+              }
+            }
+          },
+          '400': {
+            description: 'Bad Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '404': {
+            description: 'Not Found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal Server Error'
+          }
+        }
+      },
+      delete: {
+        summary: 'Delete a tutorial by ID',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string'
+            }
+          }
+        ],
+        responses: {
+          '200': {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '404': {
+            description: 'Not Found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal Server Error'
+          }
+        }
+      }
+    }
+  },
+  components: {
+    schemas: {
+      Tutorial: {
+        type: 'object',
+        properties: {
+          title: {
+            type: 'string'
+          },
+          description: {
+            type: 'string'
+          },
+          published: {
+            type: 'boolean'
+          }
+        }
+      }
+    }
+  }
+};
+
+const swaggerYaml = jsyaml.dump(swaggerData);
+fs.writeFileSync('swagger/tutorial.yaml', swaggerYaml);
